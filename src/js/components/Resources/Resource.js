@@ -33,6 +33,12 @@ const initialState = {
   comment: ""
 }
 
+function vaultUrl(vaultPath) {
+  const baseUrl = 'https://vault.adeo.no/ui/vault/secrets/';
+  const replaced = vaultPath.replace(/^([\w-]+)\/data\/(.*)\/[\w-]+$/, '$1/show/$2');
+  return baseUrl + replaced;
+}
+
 class Resource extends Component {
   constructor(props) {
     super(props)
@@ -182,31 +188,52 @@ class Resource extends Component {
           />
         )
       case "secret":
-        const secretText = this.props.currentSecrets[key]
-          ? this.props.currentSecrets[key]
-          : "No secret stored for this revision"
+        const secret = resource.secrets[key]
+        if (secret.vaultpath != null) {
+          return (
+            <ListItem
+                key={key}
+                style={{ paddingTop: "0px", paddingBottom: "14px" }}
+                disabled={true}
+                className="text-overflow"
+                primaryText={
+                  <span>
+                  <a href={vaultUrl(secret.vaultpath)}>
+                    Stored in Vault
+                  </a>{": "}
+                  {secret.vaultpath}
+                  </span>
+                }
+                secondaryText={propertyName}
+            />
+          )
+        } else {
+          const secretText = this.props.currentSecrets[key]
+              ? this.props.currentSecrets[key]
+              : "No secret stored for this revision"
 
-        return (
-          <ListItem
-            key={key}
-            style={{ paddingTop: "0px", paddingBottom: "14px" }}
-            disabled={true}
-            className="text-overflow"
-            primaryText={
-              <div>
-                {secretVisible ? secretText : "*********"}
-                <SecretToggle
-                  user={user}
-                  accesscontrol={resource.accesscontrol}
-                  secretVisible={secretVisible}
-                  toggleHandler={() => this.toggleDisplaySecret()}
-                  dispatch={dispatch}
-                />
-              </div>
-            }
-            secondaryText={propertyName}
-          />
-        )
+          return (
+            <ListItem
+              key={key}
+              style={{ paddingTop: "0px", paddingBottom: "14px" }}
+              disabled={true}
+              className="text-overflow"
+              primaryText={
+                <div>
+                  {secretVisible ? secretText : "*********"}
+                  <SecretToggle
+                    user={user}
+                    accesscontrol={resource.accesscontrol}
+                    secretVisible={secretVisible}
+                    toggleHandler={() => this.toggleDisplaySecret()}
+                    dispatch={dispatch}
+                  />
+                </div>
+              }
+              secondaryText={propertyName}
+            />
+          )
+        }
       case "file":
         return (
           <ListItem

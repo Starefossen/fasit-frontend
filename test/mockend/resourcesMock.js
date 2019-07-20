@@ -474,6 +474,41 @@ const resources = [
   },
   {
     type: "datasource",
+    alias: "vaultTestDataSource",
+    scope: {
+      environmentclass: "q",
+      zone: "sbs",
+      application: "yrkesveileder2"
+    },
+    properties: {
+      url:
+          "jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=on)(CONNECT_TIMEOUT= 15)(RETRY_COUNT=20)(RETRY_DELAY=3)(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=databaseserver.com)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=databaserserver2.com)(PORT=1522)))(CONNECT_DATA=(SERVICE_NAME=testdb_ha)))",
+      username: "db_user2"
+    },
+    secrets: {
+      password: {
+        vaultpath: "oracle/data/dev/creds/inst_q8-user/password",
+        ref: "http://localhost:6969/mockapi/secrets/771398"
+      }
+    },
+    files: {},
+    dodgy: false,
+    id: 24,
+    created: "2014-12-03T13:40:30.974",
+    updated: "2014-12-03T13:40:30.974",
+    lifecycle: {},
+    accesscontrol: {
+      environmentclass: "q",
+      adgroups: []
+    },
+    usedbyapplications: [],
+    links: {
+      self: "http://localhost:9696/resources/24",
+      revisions: "http://localhost:9696/resources/24/revisions"
+    }
+  },
+  {
+    type: "datasource",
     alias: "skikkelig.lang.url.til.datasource",
     scope: {
       environmentclass: "q",
