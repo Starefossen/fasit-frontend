@@ -132,10 +132,7 @@ class NewResourceForm extends Component {
       }
 
       if (Object.keys(currentSecrets).length > 0) {
-        form.secrets = {}
-        Object.keys(currentSecrets).forEach(k => {
-          form.secrets[k] = { value: currentSecrets[k] }
-        })
+        form.secrets = currentSecrets;
       }
 
       if (Object.keys(currentFiles).length > 0) {
@@ -237,6 +234,23 @@ class NewResourceForm extends Component {
             }
           />
         )
+      case "vaultPath":
+        return (
+            <MaterialTextArea
+                key={key}
+                field={key}
+                errorText={
+                  this.displayValidationError(properties[key], property.required)
+                      ? "Required property "
+                      : null
+                }
+                value={this.state.currentSecrets[key] != null ? this.state.currentSecrets[key].vaultpath : ''}
+                label={label}
+                onChange={(field, newValue) =>
+                    this.handleChange(field, { vaultpath: newValue }, "currentSecrets")
+                }
+            />
+        )
       case "secret":
         return (
           <MaterialTextBox
@@ -250,10 +264,10 @@ class NewResourceForm extends Component {
                 ? "Required secret "
                 : null
             }
-            value={this.state.currentSecrets[key]}
+            value={this.state.currentSecrets[key] != null ? this.state.currentSecrets[key].value : ''}
             label={label}
             onChange={(field, newValue) =>
-              this.handleChange(field, newValue, "currentSecrets")
+              this.handleChange(field, { value: newValue }, "currentSecrets")
             }
           />
         )
@@ -298,7 +312,28 @@ class NewResourceForm extends Component {
           </div>
         )
         break
+      case "vaultPath":
+        return (
+            <MaterialTextBox
+                key={key}
+                field={key}
+                errorText={
+                  this.displayValidationError(properties[key], property.required)
+                      ? "Required property "
+                      : null
+                }
+                hintText={property.hint}
+                value={this.state.properties[key]}
+                label={label}
+                onChange={(field, newValue) =>
+                    this.handleChange(field, newValue, "properties")
+                }
+            />
+        )
       default:
+        return (
+            <div>Unknown resource type {property.type}</div>
+        )
     }
   }
 

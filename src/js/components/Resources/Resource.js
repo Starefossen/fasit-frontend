@@ -187,6 +187,7 @@ class Resource extends Component {
             secondaryText={propertyName}
           />
         )
+      case "vaultPath":
       case "secret":
         const secret = resource.secrets[key]
         if (secret.vaultpath != null) {

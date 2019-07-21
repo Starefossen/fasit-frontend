@@ -54,7 +54,8 @@ export const resourceTypes = {
       textbox("onsHosts", "ONS Hosts (Oracle DataGuard only)", false),
       textbox("oemEndpoint", "OEM endpoint (Oracle PDB only)", false),
       textbox("username"),
-      secret("password")
+      // secret("password"),
+      vaultPath('password')
     ]
   },
   MSSQLDataSource: {
@@ -361,4 +362,13 @@ function file(name, displayName, required = false) {
     displayName || capitalize(name),
     required
   )
+}
+
+function vaultPath(name) {
+  return new ResourceTypeProperty(
+      "vaultPath",
+      name,
+      'Vault Path (' + name + ')',
+      true
+  );
 }
